@@ -2,29 +2,31 @@
 
 declare(strict_types=1);
 
-namespace App\State;
+namespace App\State\User;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\UserResource;
-use App\Entity\User;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 
 readonly class CurrentUserProvider implements ProviderInterface
 {
+    use SecurityHelperTrait;
+
     public function __construct(
         private Security $security,
     ) {
     }
 
+    private function getSecurity(): Security
+    {
+        return $this->security;
+    }
+
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): UserResource
     {
-        $user = $this->security->getUser();
-
-        if (false === $user instanceof User) {
-            throw new UnauthorizedHttpException('Bearer');
-        }
+        $user = $this->getUserStrict();
 
         $output = new UserResource();
         $output->email = $user->getEmail();

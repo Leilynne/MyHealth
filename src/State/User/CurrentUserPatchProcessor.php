@@ -2,24 +2,30 @@
 
 declare(strict_types=1);
 
-namespace App\State;
+namespace App\State\User;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\UserResource;
-use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 readonly class CurrentUserPatchProcessor implements ProcessorInterface
 {
+    use SecurityHelperTrait;
+
     public function __construct(
         private Security $security,
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
     ) {
+    }
+
+    private function getSecurity(): Security
+    {
+        return $this->security;
     }
 
     /**'
@@ -28,11 +34,7 @@ readonly class CurrentUserPatchProcessor implements ProcessorInterface
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): UserResource
     {
-        $user = $this->security->getUser();
-
-        if (false === $user instanceof User) {
-            throw new UnauthorizedHttpException('Bearer');
-        }
+        $user = $this->getUserStrict();
         $user->setName($data->name);
         $user->setHeight($data->height);
         $user->setTargetWeight($data->targetWeight);

@@ -5,65 +5,57 @@ declare(strict_types=1);
 namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Patch;
-use App\State\User\CurrentUserPatchProcessor;
-use App\State\User\CurrentUserProvider;
+use ApiPlatform\Metadata\Post;
+use App\Enum\ArmEnum;
+use App\State\HeartParameters\HeartParametersAddProcessor;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(
-            uriTemplate: '/current',
-            normalizationContext: ['groups' => [self::OUTPUT]],
-            provider: CurrentUserProvider::class
-        ),
-        new Patch(
-            uriTemplate: '/edit',
+//        new Get(
+//            uriTemplate: '/current',
+//            normalizationContext: ['groups' => [self::OUTPUT]],
+//            provider: CurrentUserProvider::class
+//        ),
+        new Post(
+            uriTemplate: '',
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
-            read: true,
-            provider: CurrentUserProvider::class,
-            processor: CurrentUserPatchProcessor::class,
+            processor: HeartParametersAddProcessor::class,
         ),
     ],
-    routePrefix: '/user',
+    routePrefix: '/heart-parameters',
     exceptionToStatus: [
         UnauthorizedHttpException::class => 401,
     ],
 )]
-class UserResource
+class HeartParametersResource
 {
     private const string INPUT = 'Input';
     private const string OUTPUT = 'Output';
 
-    #[Groups([self::OUTPUT])]
-    #[Assert\Email]
-    public string $email;
-
     #[Groups([self::OUTPUT, self::INPUT])]
+    #[Assert\Choice(callback: ArmEnum::class . '::stringCases')]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 2, max: 255)]
-    public string $name;
+    public string $arm;
 
     #[Groups([self::OUTPUT, self::INPUT])]
     #[Assert\Positive]
     #[Assert\NotNull]
-    public int $height;
+    public int $heartbeat;
 
     #[Groups([self::OUTPUT, self::INPUT])]
     #[Assert\Positive]
     #[Assert\NotNull]
-    public int $targetWeight;
+    public int $systola;
 
     #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Date]
+    #[Assert\Positive]
     #[Assert\NotNull]
-    public string $dateOfBirth;
+    public int $diastola;
 
-    #[Groups([self::INPUT])]
-    #[Assert\Length(min: 8)]
-    public ?string $password = null;
+    #[Groups([self::OUTPUT])]
+    public string $datetime;
 }

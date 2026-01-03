@@ -6,7 +6,7 @@ namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
-use App\State\RegisterProcessor;
+use App\State\Auth\RegisterProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class RegisterResource
 {
-    private const string INPUT = 'Inout';
+    private const string INPUT = 'Input';
     private const string OUTPUT = 'Output';
 
     #[Groups([self::INPUT])]
@@ -42,14 +42,17 @@ class RegisterResource
 
     #[Groups([self::INPUT])]
     #[Assert\Positive]
+    #[Assert\NotNull]
     public int $height;
 
     #[Groups([self::INPUT])]
     #[Assert\Positive]
+    #[Assert\NotNull]
     public int $targetWeight;
 
     #[Groups([self::INPUT])]
     #[Assert\Date]
+    #[Assert\NotNull]
     public string $dateOfBirth;
 
     #[Groups([self::OUTPUT])]
