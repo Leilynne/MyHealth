@@ -24,4 +24,29 @@ class WeightParameters
     {
         return $this->id;
     }
+
+    public function setWeight(int $weight): void
+    {
+        $this->realWeight = $weight;
+    }
+
+    public function setDatetime(\DateTimeImmutable $datetime): void
+    {
+        $this->date = $datetime;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function getWeight(): int
+    {
+        return $this->realWeight;
+    }
+
+    public function getDatetime(): \DateTimeImmutable
+    {
+        return $this->date;
+    }
 }

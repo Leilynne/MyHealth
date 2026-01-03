@@ -7,10 +7,9 @@ namespace App\ApiResource;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\ApiResource\Filter\PeriodFilter;
-use App\Enum\ArmEnum;
-use App\State\HeartParameters\HeartParametersAddProcessor;
-use App\State\HeartParameters\HeartParametersCollectionProvider;
+use App\ApiResource\Filter\NameFilter;
+use App\State\Exercise\ExerciseAddProcessor;
+use App\State\Exercise\ExerciseCollectionProvider;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,47 +21,44 @@ use Symfony\Component\Validator\Constraints as Assert;
             paginationEnabled: false,
             normalizationContext: ['groups' => [self::OUTPUT]],
             filters: [
-                PeriodFilter::class,
+                NameFilter::class,
             ],
-            provider: HeartParametersCollectionProvider::class,
+            provider: ExerciseCollectionProvider::class,
         ),
         new Post(
             uriTemplate: '',
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
-            processor: HeartParametersAddProcessor::class,
+            processor: ExerciseAddProcessor::class,
         ),
     ],
-    routePrefix: '/heart-parameters',
+    routePrefix: '/exercise',
     exceptionToStatus: [
         UnauthorizedHttpException::class => 401,
     ],
 )]
-class HeartParametersResource
+class ExerciseResource
 {
     private const string INPUT = 'Input';
     private const string OUTPUT = 'Output';
 
+    #[Groups([self::OUTPUT])]
+    public int $exerciseId;
+
     #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Choice(callback: ArmEnum::class . '::stringCases')]
+    #[Assert\Positive]
+    #[Assert\NotNull]
+    public int $kcalPerHour;
+
+    #[Groups([self::OUTPUT, self::INPUT])]
     #[Assert\NotBlank]
-    public string $arm;
+    #[Assert\Length(min: 1, max: 255)]
+    public string $name;
 
     #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $heartbeat;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $systola;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $diastola;
+    #[Assert\Length(max: 255)]
+    public string $description;
 
     #[Groups([self::OUTPUT])]
-    public string $datetime;
+    public bool $isSystem;
 }

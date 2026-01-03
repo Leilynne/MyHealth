@@ -2,38 +2,38 @@
 
 namespace App\Repository;
 
-use App\Entity\HeartParameters;
+use App\Entity\WeightParameters;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<HeartParameters>
+ * @extends ServiceEntityRepository<WeightParameters>
  */
-class HeartParametersRepository extends ServiceEntityRepository
+class WeightParametersRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, HeartParameters::class);
+        parent::__construct($registry, WeightParameters::class);
     }
 
-    public function save(HeartParameters $heartParameters): void
+    public function save(WeightParameters $weightParameters): void
     {
-        $this->getEntityManager()->persist($heartParameters);
+        $this->getEntityManager()->persist($weightParameters);
         $this->getEntityManager()->flush();
     }
 
     /**
-     * @return array<int, HeartParameters>
+     * @return array<int, WeightParameters>
      */
     public function findByUserAndSince(int $userId, ?\DateTimeImmutable $since = null): array
     {
-        $queryBuilder = $this->createQueryBuilder('hp')
-            ->where('hp.user = :userId')
+        $queryBuilder = $this->createQueryBuilder('wp')
+            ->where('wp.user = :userId')
             ->setParameter('userId', $userId)
-            ->orderBy('hp.date', 'DESC');
+            ->orderBy('wp.date', 'DESC');
 
         if ($since !== null) {
-            $queryBuilder->andWhere('hp.date >= :since')
+            $queryBuilder->andWhere('wp.date >= :since')
                 ->setParameter('since', $since);
         }
 

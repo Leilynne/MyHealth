@@ -8,9 +8,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\ApiResource\Filter\PeriodFilter;
-use App\Enum\ArmEnum;
-use App\State\HeartParameters\HeartParametersAddProcessor;
-use App\State\HeartParameters\HeartParametersCollectionProvider;
+use App\State\ExerciseSession\ExerciseSessionAddProcessor;
+use App\State\ExerciseSession\ExerciseSessionCollectionProvider;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,45 +23,32 @@ use Symfony\Component\Validator\Constraints as Assert;
             filters: [
                 PeriodFilter::class,
             ],
-            provider: HeartParametersCollectionProvider::class,
+            provider: ExerciseSessionCollectionProvider::class,
         ),
         new Post(
             uriTemplate: '',
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
-            processor: HeartParametersAddProcessor::class,
+            processor: ExerciseSessionAddProcessor::class,
         ),
     ],
-    routePrefix: '/heart-parameters',
+    routePrefix: '/exercise-session',
     exceptionToStatus: [
         UnauthorizedHttpException::class => 401,
     ],
 )]
-class HeartParametersResource
+class ExerciseSessionResource
 {
     private const string INPUT = 'Input';
     private const string OUTPUT = 'Output';
 
     #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Choice(callback: ArmEnum::class . '::stringCases')]
-    #[Assert\NotBlank]
-    public string $arm;
+    #[Assert\Positive]
+    #[Assert\NotNull]
+    public int $exerciseId;
 
     #[Groups([self::OUTPUT, self::INPUT])]
     #[Assert\Positive]
     #[Assert\NotNull]
-    public int $heartbeat;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $systola;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $diastola;
-
-    #[Groups([self::OUTPUT])]
-    public string $datetime;
+    public int $duration;
 }

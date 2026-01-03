@@ -8,9 +8,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\ApiResource\Filter\PeriodFilter;
-use App\Enum\ArmEnum;
-use App\State\HeartParameters\HeartParametersAddProcessor;
-use App\State\HeartParameters\HeartParametersCollectionProvider;
+use App\State\WeightParameters\WeightParametersAddProcessor;
+use App\State\WeightParameters\WeightParametersCollectionProvider;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,44 +23,29 @@ use Symfony\Component\Validator\Constraints as Assert;
             filters: [
                 PeriodFilter::class,
             ],
-            provider: HeartParametersCollectionProvider::class,
+            provider: WeightParametersCollectionProvider::class,
         ),
         new Post(
             uriTemplate: '',
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
-            processor: HeartParametersAddProcessor::class,
+            processor: WeightParametersAddProcessor::class,
         ),
     ],
-    routePrefix: '/heart-parameters',
+    routePrefix: '/weight-parameters',
     exceptionToStatus: [
         UnauthorizedHttpException::class => 401,
     ],
 )]
-class HeartParametersResource
+class WeightParametersResource
 {
     private const string INPUT = 'Input';
     private const string OUTPUT = 'Output';
 
     #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Choice(callback: ArmEnum::class . '::stringCases')]
-    #[Assert\NotBlank]
-    public string $arm;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
     #[Assert\Positive]
     #[Assert\NotNull]
-    public int $heartbeat;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $systola;
-
-    #[Groups([self::OUTPUT, self::INPUT])]
-    #[Assert\Positive]
-    #[Assert\NotNull]
-    public int $diastola;
+    public int $weight;
 
     #[Groups([self::OUTPUT])]
     public string $datetime;

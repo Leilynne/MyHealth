@@ -12,6 +12,9 @@ use Random\RandomException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * @implements ProcessorInterface<LoginResource>
+ */
 readonly class LoginProcessor implements ProcessorInterface
 {
     public function __construct(

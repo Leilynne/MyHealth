@@ -13,6 +13,9 @@ use Random\RandomException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * @implements ProcessorInterface<RegisterResource>
+ */
 readonly class RegisterProcessor implements ProcessorInterface
 {
     public function __construct(

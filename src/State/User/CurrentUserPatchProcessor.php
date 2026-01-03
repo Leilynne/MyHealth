@@ -12,6 +12,9 @@ use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * @implements ProcessorInterface<UserResource>
+ */
 readonly class CurrentUserPatchProcessor implements ProcessorInterface
 {
     use SecurityHelperTrait;

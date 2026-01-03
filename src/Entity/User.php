@@ -16,7 +16,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 180)]
     private string $email;
@@ -49,12 +49,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $weightParameters;
 
     #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'user')]
-    private Collection $exercise;
+    private Collection $exercises;
+
+    #[ORM\OneToMany(targetEntity: ExerciseSession::class, mappedBy: 'user')]
+    private Collection $exerciseSessions;
 
     #[ORM\Column(length: 255, unique: true, nullable: true)]
     private ?string $apiToken = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -179,5 +182,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getDateOfBirth(): \DateTimeImmutable
     {
         return $this->dateOfBirth;
+    }
+
+    /**
+     * @return Collection<int, HeartParameters>
+     */
+    public function getHeartParameters(): Collection
+    {
+        return $this->heartParameters;
     }
 }

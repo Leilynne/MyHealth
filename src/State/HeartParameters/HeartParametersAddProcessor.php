@@ -13,6 +13,9 @@ use App\Repository\HeartParametersRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 
+/**
+ * @implements ProcessorInterface<HeartParametersResource>
+ */
 readonly class HeartParametersAddProcessor implements ProcessorInterface
 {
     use SecurityHelperTrait;

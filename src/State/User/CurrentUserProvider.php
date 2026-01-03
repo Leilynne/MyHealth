@@ -10,6 +10,9 @@ use App\ApiResource\UserResource;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 
+/**
+ * @implements ProviderInterface<UserResource>
+ */
 readonly class CurrentUserProvider implements ProviderInterface
 {
     use SecurityHelperTrait;
