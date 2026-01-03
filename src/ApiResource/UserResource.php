@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/edit',
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
+            read: true,
             provider: CurrentUserProvider::class,
             processor: CurrentUserPatchProcessor::class,
         ),
@@ -60,7 +61,6 @@ class UserResource
     public string $dateOfBirth;
 
     #[Groups([self::INPUT])]
-    #[Assert\NotBlank]
     #[Assert\Length(min: 8)]
-    public string $password;
+    public ?string $password = null;
 }

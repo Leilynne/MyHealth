@@ -37,7 +37,9 @@ readonly class CurrentUserPatchProcessor implements ProcessorInterface
         $user->setHeight($data->height);
         $user->setTargetWeight($data->targetWeight);
         $user->setDateOfBirth(new \DateTimeImmutable($data->dateOfBirth));
-        $user->setPassword($this->passwordHasher->hashPassword($user, $data->password));
+        if (null !== $data->password) {
+            $user->setPassword($this->passwordHasher->hashPassword($user, $data->password));
+        }
         $this->userRepository->save($user);
 
         $output = new UserResource();
