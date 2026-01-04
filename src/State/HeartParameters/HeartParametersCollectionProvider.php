@@ -56,6 +56,7 @@ readonly class HeartParametersCollectionProvider implements ProviderInterface
             $resource->arm = $heartParameter->getArm()->value;
             $resource->systola = $heartParameter->getSystola();
             $resource->diastola = $heartParameter->getDiastola();
+            $resource->heartbeat = $heartParameter->getHeartBeat();
             $resource->datetime = $heartParameter->getDatetime()->format('Y-m-d H:i:s');
 
             $output[] = $resource;

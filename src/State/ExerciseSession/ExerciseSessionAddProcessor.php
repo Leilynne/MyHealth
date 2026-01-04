@@ -6,6 +6,7 @@ namespace App\State\ExerciseSession;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\ApiResource\ExerciseResource;
 use App\ApiResource\ExerciseSessionResource;
 use App\Entity\ExerciseSession;
 use App\Repository\ExerciseRepository;
@@ -50,7 +51,10 @@ readonly class ExerciseSessionAddProcessor implements ProcessorInterface
 
         $output = new ExerciseSessionResource();
         $output->duration = $exerciseSession->getDuration();
-        $output->exerciseId = $exerciseSession->getExercise()->getId();
+        $output->exerciseId = $exercise->getId();
+        $output->totalKcal = (int) ($exercise->getKcalPerHour() * $exerciseSession->getDuration() / 60);
+        $output->exerciseName = $exercise->getName();
+        $output->performedAt = $datetime->format('Y-m-d H:i:s');
 
         return $output;
     }

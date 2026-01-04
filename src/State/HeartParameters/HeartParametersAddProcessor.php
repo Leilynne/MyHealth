@@ -49,6 +49,7 @@ readonly class HeartParametersAddProcessor implements ProcessorInterface
 
         $output = new HeartParametersResource();
         $output->arm = $heartParameters->getArm()->value;
+        $output->heartbeat = $heartParameters->getHeartBeat();
         $output->systola = $heartParameters->getSystola();
         $output->diastola = $heartParameters->getDiastola();
         $output->datetime = $heartParameters->getDatetime()->format('Y-m-d H:i:s');

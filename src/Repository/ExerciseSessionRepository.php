@@ -27,7 +27,9 @@ class ExerciseSessionRepository extends ServiceEntityRepository
      */
     public function findByFilters(int $userId, ?\DateTimeImmutable $since = null): array
     {
-        $queryBuilder = $this->createQueryBuilder('es');
+        $queryBuilder = $this->createQueryBuilder('es')
+            ->leftJoin('es.exercise', 'e')
+            ->select('es', 'e');
 
         $queryBuilder->where('es.user = :userId')
             ->setParameter('userId', $userId);

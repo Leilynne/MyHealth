@@ -56,6 +56,9 @@ readonly class ExerciseSessionCollectionProvider implements ProviderInterface
 
             $resource->duration = $exerciseSession->getDuration();
             $resource->exerciseId = $exerciseSession->getExercise()->getId();
+            $resource->totalKcal = (int) ($exerciseSession->getExercise()->getKcalPerHour() * $exerciseSession->getDuration() / 60);
+            $resource->exerciseName = $exerciseSession->getExercise()->getName();
+            $resource->performedAt = $exerciseSession->getPerformedAt()->format('Y-m-d H:i:s');
 
             $output[] = $resource;
         }

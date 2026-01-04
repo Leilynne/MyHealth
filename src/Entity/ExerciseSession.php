@@ -57,4 +57,9 @@ class ExerciseSession
     {
         return $this->exercise;
     }
+
+    public function getPerformedAt(): \DateTimeImmutable
+    {
+        return $this->performedAt;
+    }
 }

@@ -86,4 +86,9 @@ class HeartParameters
     {
         return $this->date;
     }
+
+    public function getHeartBeat(): int
+    {
+        return $this->heartBeat;
+    }
 }
