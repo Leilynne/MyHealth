@@ -36,7 +36,7 @@ readonly class MedicationScheduleDeleteProcessor implements ProcessorInterface
     {
         $user = $this->getUserStrict();
 
-        $medicationSchedule = $this->medicationScheduleRepository->findByIdAndUserId($uriVariables['id'], $user->getId());
+        $medicationSchedule = $this->medicationScheduleRepository->findByIdAndUserId((int) $uriVariables['id'], $user->getId());
         $this->medicationScheduleRepository->remove($medicationSchedule);
     }
 }

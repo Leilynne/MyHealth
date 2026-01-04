@@ -33,7 +33,7 @@ readonly class ExerciseProvider implements ProviderInterface
     {
         $user = $this->getUserStrict();
 
-        $exercise = $this->exerciseRepository->getByIdAndUserId($uriVariables['id'], $user->getId());
+        $exercise = $this->exerciseRepository->getByIdAndUserId((int) $uriVariables['id'], $user->getId());
 
         $resource = new ExerciseResource();
         $resource->id = $exercise->getId();

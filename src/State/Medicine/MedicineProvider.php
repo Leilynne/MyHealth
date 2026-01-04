@@ -21,7 +21,7 @@ readonly class MedicineProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): MedicineResource
     {
-        $medicine = $this->medicineRepository->findById($uriVariables['id']);
+        $medicine = $this->medicineRepository->findById((int) $uriVariables['id']);
 
         $resource = new MedicineResource();
         $resource->id = $medicine->getId();
