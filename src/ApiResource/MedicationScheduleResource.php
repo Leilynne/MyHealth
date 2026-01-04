@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use App\Enum\TimeOfDayEnum;
 use App\State\MedicationSchedule\MedicationScheduleAddProcessor;
 use App\State\MedicationSchedule\MedicationScheduleCollectionProvider;
+use App\State\MedicationSchedule\MedicationScheduleDeleteProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
