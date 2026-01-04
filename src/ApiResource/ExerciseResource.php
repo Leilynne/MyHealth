@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\ApiResource;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\ApiResource\Filter\NameFilter;
 use App\State\Exercise\ExerciseAddProcessor;
 use App\State\Exercise\ExerciseCollectionProvider;
+use App\State\Exercise\ExerciseProvider;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: '',
+            uriTemplate: '/exercise',
             paginationEnabled: false,
             normalizationContext: ['groups' => [self::OUTPUT]],
             filters: [
@@ -25,14 +28,18 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             provider: ExerciseCollectionProvider::class,
         ),
+        new Get(
+            uriTemplate: '/exercise/{id}',
+            normalizationContext: ['groups' => [self::OUTPUT]],
+            provider: ExerciseProvider::class,
+        ),
         new Post(
-            uriTemplate: '',
+            uriTemplate: '/exercise',
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
             processor: ExerciseAddProcessor::class,
         ),
     ],
-    routePrefix: '/exercise',
     exceptionToStatus: [
         UnauthorizedHttpException::class => 401,
     ],
@@ -43,7 +50,8 @@ class ExerciseResource
     private const string OUTPUT = 'Output';
 
     #[Groups([self::OUTPUT])]
-    public int $exerciseId;
+    #[ApiProperty(identifier: true)]
+    public int $id;
 
     #[Groups([self::OUTPUT, self::INPUT])]
     #[Assert\Positive]

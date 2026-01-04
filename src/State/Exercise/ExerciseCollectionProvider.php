@@ -46,7 +46,7 @@ readonly class ExerciseCollectionProvider implements ProviderInterface
         foreach ($exercises as $exercise) {
             $resource = new ExerciseResource();
 
-            $resource->exerciseId = $exercise->getId();
+            $resource->id = $exercise->getId();
             $resource->kcalPerHour = $exercise->getKcalPerHour();
             $resource->name = $exercise->getName();
             $resource->description = $exercise->getDescription();

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Medicine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @extends ServiceEntityRepository<Medicine>
@@ -35,5 +36,10 @@ class MedicineRepository extends ServiceEntityRepository
         }
 
         return $qb->orderBy('m.name', 'ASC')->getQuery()->getResult();
+    }
+
+    public function findById(int $id): Medicine
+    {
+        return $this->find($id) ?? throw new NotFoundHttpException();
     }
 }

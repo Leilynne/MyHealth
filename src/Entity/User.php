@@ -54,6 +54,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: ExerciseSession::class, mappedBy: 'user')]
     private Collection $exerciseSessions;
 
+    #[ORM\OneToMany(targetEntity: MedicationSchedule::class, mappedBy: 'user')]
+    private Collection $medicationSchedules;
+
     #[ORM\Column(length: 255, unique: true, nullable: true)]
     private ?string $apiToken = null;
 

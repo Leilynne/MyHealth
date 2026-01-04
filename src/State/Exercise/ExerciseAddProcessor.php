@@ -45,7 +45,7 @@ readonly class ExerciseAddProcessor implements ProcessorInterface
         $this->exerciseRepository->save($exercise);
 
         $output = new ExerciseResource();
-        $output->exerciseId = $exercise->getId();
+        $output->id = $exercise->getId();
         $output->name = $exercise->getName();
         $output->description = $exercise->getDescription();
         $output->kcalPerHour = $exercise->getKcalPerHour();

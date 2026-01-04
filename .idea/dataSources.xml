@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://127.0.0.1:32768/app</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="postgres@project.nas.hellsingoff.org" uuid="de78fa5c-7524-4ec7-a1ca-4d28b003a8c6">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://project.nas.hellsingoff.org:32774/postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

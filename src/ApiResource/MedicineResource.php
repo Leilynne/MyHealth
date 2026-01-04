@@ -38,5 +38,5 @@ class MedicineResource
     public string $name;
 
     #[Groups([self::OUTPUT])]
-    public string $description;
+    public ?string $description = null;
 }
