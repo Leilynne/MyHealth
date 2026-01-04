@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Enum\TimeOfDayEnum;
@@ -26,6 +27,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => [self::OUTPUT]],
             denormalizationContext: ['groups' => [self::INPUT]],
             processor: MedicationScheduleAddProcessor::class,
+        ),
+        new Delete(
+            uriTemplate: '/{id}',
+            read: false,
+            processor: MedicationScheduleDeleteProcessor::class,
         ),
     ],
     routePrefix: '/medication-schedule',

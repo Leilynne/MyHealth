@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\State;
+namespace App\State\Medicine;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -34,7 +34,7 @@ readonly class MedicineCollectionProvider implements ProviderInterface
         foreach ($medicines as $medicine) {
             $resource = new MedicineResource();
 
-            $resource->medicineId = $medicine->getId();
+            $resource->id = $medicine->getId();
             $resource->dose = $medicine->getDose();
             $resource->name = $medicine->getName();
             $resource->description = $medicine->getDescription();

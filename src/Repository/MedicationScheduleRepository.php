@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\MedicationSchedule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @extends ServiceEntityRepository<MedicationSchedule>
@@ -35,5 +36,16 @@ class MedicationScheduleRepository extends ServiceEntityRepository
             ->orderBy('ms.timeOfDay', 'ASC');
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findByIdAndUserId(int $id, int $userId): MedicationSchedule
+    {
+        return $this->findOneBy(['id' => $id, 'user' => $userId]) ?? throw new NotFoundHttpException();
+    }
+
+    public function remove(MedicationSchedule $medicationSchedule): void
+    {
+        $this->getEntityManager()->remove($medicationSchedule);
+        $this->getEntityManager()->flush();
     }
 }
