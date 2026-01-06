@@ -9,6 +9,7 @@ use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\MedicationScheduleResource;
 use App\Entity\MedicationSchedule;
 use App\Enum\TimeOfDayEnum;
+use App\Mapper\MedicationScheduleMapper;
 use App\Repository\MedicationScheduleRepository;
 use App\Repository\MedicineRepository;
 use App\Security\SecurityHelperTrait;
@@ -25,6 +26,7 @@ readonly class MedicationScheduleAddProcessor implements ProcessorInterface
         private Security $security,
         private MedicationScheduleRepository $medicationScheduleRepository,
         private MedicineRepository $medicineRepository,
+        private MedicationScheduleMapper $medicationScheduleMapper,
     ) {
     }
 
@@ -48,12 +50,6 @@ readonly class MedicationScheduleAddProcessor implements ProcessorInterface
         $medicationSchedule->setMedicine($medicine);
         $this->medicationScheduleRepository->save($medicationSchedule);
 
-        $output = new MedicationScheduleResource();
-        $output->medicationScheduleId = $medicationSchedule->getId();
-        $output->timeOfDay = $medicationSchedule->getTimeOfDay()->value;
-        $output->medicineId = $medicationSchedule->getMedicine()->getId();
-        $output->medicineName = $medicationSchedule->getMedicine()->getName();
-
-        return $output;
+        return $this->medicationScheduleMapper->mapEntityToResource($medicationSchedule);
     }
 }

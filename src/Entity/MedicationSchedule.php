@@ -18,9 +18,11 @@ class MedicationSchedule
     private TimeOfDayEnum $timeOfDay;
 
     #[ORM\ManyToOne(targetEntity: Medicine::class, inversedBy: 'schedules')]
+    #[ORM\JoinColumn(nullable: false)]
     private Medicine $medicine;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'medicationSchedules')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): int

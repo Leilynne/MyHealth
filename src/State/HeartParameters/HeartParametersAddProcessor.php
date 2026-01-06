@@ -9,6 +9,7 @@ use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\HeartParametersResource;
 use App\Entity\HeartParameters;
 use App\Enum\ArmEnum;
+use App\Mapper\HeartParametersMapper;
 use App\Repository\HeartParametersRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,6 +24,7 @@ readonly class HeartParametersAddProcessor implements ProcessorInterface
     public function __construct(
         private Security $security,
         private HeartParametersRepository $heartParametersRepository,
+        private HeartParametersMapper $heartParametersMapper,
     ) {
     }
 
@@ -47,13 +49,6 @@ readonly class HeartParametersAddProcessor implements ProcessorInterface
         $heartParameters->setUser($user);
         $this->heartParametersRepository->save($heartParameters);
 
-        $output = new HeartParametersResource();
-        $output->arm = $heartParameters->getArm()->value;
-        $output->heartbeat = $heartParameters->getHeartBeat();
-        $output->systola = $heartParameters->getSystola();
-        $output->diastola = $heartParameters->getDiastola();
-        $output->datetime = $heartParameters->getDatetime()->format('Y-m-d H:i:s');
-
-        return $output;
+        return $this->heartParametersMapper->mapEntityToResource($heartParameters);
     }
 }

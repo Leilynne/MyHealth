@@ -30,6 +30,7 @@ class HeartParameters
     private \DateTimeImmutable $date;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'heartParameters')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): int

@@ -6,9 +6,9 @@ namespace App\State\ExerciseSession;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\ApiResource\ExerciseResource;
 use App\ApiResource\ExerciseSessionResource;
 use App\Entity\ExerciseSession;
+use App\Mapper\ExerciseSessionMapper;
 use App\Repository\ExerciseRepository;
 use App\Repository\ExerciseSessionRepository;
 use App\Security\SecurityHelperTrait;
@@ -25,6 +25,7 @@ readonly class ExerciseSessionAddProcessor implements ProcessorInterface
         private Security $security,
         private ExerciseSessionRepository $exerciseSessionRepository,
         private ExerciseRepository $exerciseRepository,
+        private ExerciseSessionMapper $exerciseSessionMapper,
     ) {
     }
 
@@ -49,13 +50,6 @@ readonly class ExerciseSessionAddProcessor implements ProcessorInterface
         $exerciseSession->setDuration($data->duration);
         $this->exerciseSessionRepository->save($exerciseSession);
 
-        $output = new ExerciseSessionResource();
-        $output->duration = $exerciseSession->getDuration();
-        $output->exerciseId = $exercise->getId();
-        $output->totalKcal = (int) ($exercise->getKcalPerHour() * $exerciseSession->getDuration() / 60);
-        $output->exerciseName = $exercise->getName();
-        $output->performedAt = $datetime->format('Y-m-d H:i:s');
-
-        return $output;
+        return $this->exerciseSessionMapper->mapEntityToResource($exerciseSession);
     }
 }

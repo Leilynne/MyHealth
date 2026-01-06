@@ -7,6 +7,7 @@ namespace App\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\ExerciseResource;
+use App\Mapper\ExerciseMapper;
 use App\Repository\ExerciseRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,6 +22,7 @@ readonly class ExerciseProvider implements ProviderInterface
     public function __construct(
         private Security $security,
         private ExerciseRepository $exerciseRepository,
+        private ExerciseMapper $exerciseMapper,
     ) {
     }
 
@@ -35,13 +37,6 @@ readonly class ExerciseProvider implements ProviderInterface
 
         $exercise = $this->exerciseRepository->getByIdAndUserId((int) $uriVariables['id'], $user->getId());
 
-        $resource = new ExerciseResource();
-        $resource->id = $exercise->getId();
-        $resource->kcalPerHour = $exercise->getKcalPerHour();
-        $resource->name = $exercise->getName();
-        $resource->description = $exercise->getDescription();
-        $resource->isSystem = $exercise->isSystem();
-
-        return $resource;
+        return $this->exerciseMapper->mapEntityToResource($exercise);
     }
 }

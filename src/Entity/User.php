@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -36,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private int $targetWeight;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private \DateTimeImmutable $dateOfBirth;
 
     #[ORM\Column]
@@ -56,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: MedicationSchedule::class, mappedBy: 'user')]
     private Collection $medicationSchedules;
+
+    #[ORM\OneToMany(targetEntity: FoodIntake::class, mappedBy: 'user')]
+    private Collection $foodIntakes;
 
     #[ORM\Column(length: 255, unique: true, nullable: true)]
     private ?string $apiToken = null;

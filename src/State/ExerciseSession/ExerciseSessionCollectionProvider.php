@@ -9,6 +9,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\ExerciseSessionResource;
 use App\ApiResource\Filter\PeriodFilter;
 use App\Enum\PeriodEnum;
+use App\Mapper\ExerciseSessionMapper;
 use App\Repository\ExerciseSessionRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,6 +24,7 @@ readonly class ExerciseSessionCollectionProvider implements ProviderInterface
     public function __construct(
         private Security $security,
         private ExerciseSessionRepository $exerciseSessionRepository,
+        private ExerciseSessionMapper $exerciseSessionMapper,
     ) {
     }
 
@@ -52,15 +54,7 @@ readonly class ExerciseSessionCollectionProvider implements ProviderInterface
         $output = [];
 
         foreach ($exerciseSessions as $exerciseSession) {
-            $resource = new ExerciseSessionResource();
-
-            $resource->duration = $exerciseSession->getDuration();
-            $resource->exerciseId = $exerciseSession->getExercise()->getId();
-            $resource->totalKcal = (int) ($exerciseSession->getExercise()->getKcalPerHour() * $exerciseSession->getDuration() / 60);
-            $resource->exerciseName = $exerciseSession->getExercise()->getName();
-            $resource->performedAt = $exerciseSession->getPerformedAt()->format('Y-m-d H:i:s');
-
-            $output[] = $resource;
+            $output[] = $this->exerciseSessionMapper->mapEntityToResource($exerciseSession);
         }
 
         return $output;

@@ -9,6 +9,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\Filter\PeriodFilter;
 use App\ApiResource\HeartParametersResource;
 use App\Enum\PeriodEnum;
+use App\Mapper\HeartParametersMapper;
 use App\Repository\HeartParametersRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,6 +24,7 @@ readonly class HeartParametersCollectionProvider implements ProviderInterface
     public function __construct(
         private Security $security,
         private HeartParametersRepository $heartParametersRepository,
+        private HeartParametersMapper $heartParametersMapper,
     ) {
     }
 
@@ -51,15 +53,7 @@ readonly class HeartParametersCollectionProvider implements ProviderInterface
         $output = [];
 
         foreach ($heartParameters as $heartParameter) {
-            $resource = new HeartParametersResource();
-
-            $resource->arm = $heartParameter->getArm()->value;
-            $resource->systola = $heartParameter->getSystola();
-            $resource->diastola = $heartParameter->getDiastola();
-            $resource->heartbeat = $heartParameter->getHeartBeat();
-            $resource->datetime = $heartParameter->getDatetime()->format('Y-m-d H:i:s');
-
-            $output[] = $resource;
+            $output[] = $this->heartParametersMapper->mapEntityToResource($heartParameter);
         }
 
         return $output;

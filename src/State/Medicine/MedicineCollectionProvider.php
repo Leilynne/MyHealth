@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\Filter\NameFilter;
 use App\ApiResource\MedicineResource;
+use App\Mapper\MedicineMapper;
 use App\Repository\MedicineRepository;
 
 /**
@@ -17,6 +18,7 @@ readonly class MedicineCollectionProvider implements ProviderInterface
 {
     public function __construct(
         private MedicineRepository $medicineRepository,
+        private MedicineMapper $medicineMapper,
     ) {
     }
 
@@ -32,14 +34,7 @@ readonly class MedicineCollectionProvider implements ProviderInterface
         $output = [];
 
         foreach ($medicines as $medicine) {
-            $resource = new MedicineResource();
-
-            $resource->id = $medicine->getId();
-            $resource->dose = $medicine->getDose();
-            $resource->name = $medicine->getName();
-            $resource->description = $medicine->getDescription();
-
-            $output[] = $resource;
+            $output[] = $this->medicineMapper->mapEntityToResource($medicine);
         }
 
         return $output;

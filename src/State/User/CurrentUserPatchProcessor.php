@@ -7,6 +7,7 @@ namespace App\State\User;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\UserResource;
+use App\Mapper\UserMapper;
 use App\Repository\UserRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,6 +24,7 @@ readonly class CurrentUserPatchProcessor implements ProcessorInterface
         private Security $security,
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
+        private UserMapper $userMapper,
     ) {
     }
 
@@ -47,13 +49,6 @@ readonly class CurrentUserPatchProcessor implements ProcessorInterface
         }
         $this->userRepository->save($user);
 
-        $output = new UserResource();
-        $output->email = $user->getEmail();
-        $output->name = $user->getName();
-        $output->height = $user->getHeight();
-        $output->targetWeight = $user->getTargetWeight();
-        $output->dateOfBirth = $user->getDateOfBirth()->format('Y-m-d');
-
-        return $output;
+        return $this->userMapper->mapEntityToResource($user);
     }
 }

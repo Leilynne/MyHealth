@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Entity;
+use App\Repository\ExerciseRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: Exercise::class)]
+#[ORM\Entity(repositoryClass: ExerciseRepository::class)]
 class Exercise
 {
     #[ORM\Id]

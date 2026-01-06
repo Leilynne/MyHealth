@@ -7,6 +7,7 @@ namespace App\State\Medicine;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\MedicineResource;
+use App\Mapper\MedicineMapper;
 use App\Repository\MedicineRepository;
 
 /**
@@ -16,6 +17,7 @@ readonly class MedicineProvider implements ProviderInterface
 {
     public function __construct(
         private MedicineRepository $medicineRepository,
+        private MedicineMapper $medicineMapper,
     ) {
     }
 
@@ -23,12 +25,6 @@ readonly class MedicineProvider implements ProviderInterface
     {
         $medicine = $this->medicineRepository->findById((int) $uriVariables['id']);
 
-        $resource = new MedicineResource();
-        $resource->id = $medicine->getId();
-        $resource->dose = $medicine->getDose();
-        $resource->name = $medicine->getName();
-        $resource->description = $medicine->getDescription();
-
-        return $resource;
+        return $this->medicineMapper->mapEntityToResource($medicine);
     }
 }

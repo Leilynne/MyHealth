@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\WeightParametersResource;
 use App\Entity\WeightParameters;
+use App\Mapper\WeightParametersMapper;
 use App\Repository\WeightParametersRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -22,6 +23,7 @@ readonly class WeightParametersAddProcessor implements ProcessorInterface
     public function __construct(
         private Security $security,
         private WeightParametersRepository $weightParametersRepository,
+        private WeightParametersMapper $weightParametersMapper,
     ) {
     }
 
@@ -43,10 +45,6 @@ readonly class WeightParametersAddProcessor implements ProcessorInterface
         $weightParameters->setUser($user);
         $this->weightParametersRepository->save($weightParameters);
 
-        $output = new WeightParametersResource();
-        $output->weight = $weightParameters->getWeight();
-        $output->datetime = $weightParameters->getDatetime()->format('Y-m-d H:i:s');
-
-        return $output;
+        return $this->weightParametersMapper->mapEntityToResource($weightParameters);
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Entity;
+use App\Repository\WeightParametersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: WeightParameters::class)]
+#[ORM\Entity(repositoryClass: WeightParametersRepository::class)]
 class WeightParameters
 {
     #[ORM\Id]
@@ -18,6 +19,7 @@ class WeightParameters
     private \DateTimeImmutable $date;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'weightParameters')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): int

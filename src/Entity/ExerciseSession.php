@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Entity;
+use App\Repository\ExerciseSessionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ExerciseSession::class)]
+#[ORM\Entity(repositoryClass: ExerciseSessionRepository::class)]
 class ExerciseSession
 {
     #[ORM\Id]
@@ -18,9 +19,11 @@ class ExerciseSession
     private \DateTimeImmutable $performedAt;
 
     #[ORM\ManyToOne(targetEntity: Exercise::class, inversedBy: 'sessions')]
+    #[ORM\JoinColumn(nullable: false)]
     private Exercise $exercise;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'exerciseSessions')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): int
@@ -61,5 +64,10 @@ class ExerciseSession
     public function getPerformedAt(): \DateTimeImmutable
     {
         return $this->performedAt;
+    }
+
+    public function getTotalKcal(): float
+    {
+        return $this->exercise->getKcalPerHour() * $this->getDuration() / 60;
     }
 }

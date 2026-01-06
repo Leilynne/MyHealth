@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\ExerciseResource;
 use App\Entity\Exercise;
+use App\Mapper\ExerciseMapper;
 use App\Repository\ExerciseRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -22,6 +23,7 @@ readonly class ExerciseAddProcessor implements ProcessorInterface
     public function __construct(
         private Security $security,
         private ExerciseRepository $exerciseRepository,
+        private ExerciseMapper $exerciseMapper,
     ) {
     }
 
@@ -44,13 +46,6 @@ readonly class ExerciseAddProcessor implements ProcessorInterface
         $exercise->setSystem(false);
         $this->exerciseRepository->save($exercise);
 
-        $output = new ExerciseResource();
-        $output->id = $exercise->getId();
-        $output->name = $exercise->getName();
-        $output->description = $exercise->getDescription();
-        $output->kcalPerHour = $exercise->getKcalPerHour();
-        $output->isSystem = $exercise->isSystem();
-
-        return $output;
+        return $this->exerciseMapper->mapEntityToResource($exercise);
     }
 }

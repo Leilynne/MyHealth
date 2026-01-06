@@ -7,6 +7,7 @@ namespace App\State\User;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\UserResource;
+use App\Mapper\UserMapper;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -19,6 +20,7 @@ readonly class CurrentUserProvider implements ProviderInterface
 
     public function __construct(
         private Security $security,
+        private UserMapper $userMapper,
     ) {
     }
 
@@ -31,13 +33,6 @@ readonly class CurrentUserProvider implements ProviderInterface
     {
         $user = $this->getUserStrict();
 
-        $output = new UserResource();
-        $output->email = $user->getEmail();
-        $output->name = $user->getName();
-        $output->height = $user->getHeight();
-        $output->targetWeight = $user->getTargetWeight();
-        $output->dateOfBirth = $user->getDateOfBirth()->format('Y-m-d');
-
-        return $output;
+        return $this->userMapper->mapEntityToResource($user);
     }
 }

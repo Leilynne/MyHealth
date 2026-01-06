@@ -37,7 +37,7 @@ readonly class ExerciseSessionTodayTotalKcalProvider implements ProviderInterfac
         $todayKcal = 0;
 
         foreach ($exerciseSessions as $exerciseSession) {
-            $todayKcal += $exerciseSession->getDuration() * $exerciseSession->getExercise()->getKcalPerHour() / 60;
+            $todayKcal += $exerciseSession->getTotalKcal();
         }
 
         $output = new ExerciseSessionResource();

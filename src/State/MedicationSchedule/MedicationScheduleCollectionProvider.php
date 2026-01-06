@@ -7,6 +7,7 @@ namespace App\State\MedicationSchedule;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\MedicationScheduleResource;
+use App\Mapper\MedicationScheduleMapper;
 use App\Repository\MedicationScheduleRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,6 +22,7 @@ readonly class MedicationScheduleCollectionProvider implements ProviderInterface
     public function __construct(
         private Security $security,
         private MedicationScheduleRepository $medicationScheduleRepository,
+        private MedicationScheduleMapper $medicationScheduleMapper,
     ) {
     }
 
@@ -41,14 +43,7 @@ readonly class MedicationScheduleCollectionProvider implements ProviderInterface
         $output = [];
 
         foreach ($medicationSchedules as $medicationSchedule) {
-            $resource = new MedicationScheduleResource();
-
-            $resource->medicationScheduleId = $medicationSchedule->getId();
-            $resource->timeOfDay = $medicationSchedule->getTimeOfDay()->value;
-            $resource->medicineId = $medicationSchedule->getMedicine()->getId();
-            $resource->medicineName = $medicationSchedule->getMedicine()->getName();
-
-            $output[] = $resource;
+            $output[] = $this->medicationScheduleMapper->mapEntityToResource($medicationSchedule);
         }
 
         return $output;

@@ -9,6 +9,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\Filter\PeriodFilter;
 use App\ApiResource\WeightParametersResource;
 use App\Enum\PeriodEnum;
+use App\Mapper\WeightParametersMapper;
 use App\Repository\WeightParametersRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,6 +24,7 @@ readonly class WeightParametersCollectionProvider implements ProviderInterface
     public function __construct(
         private Security $security,
         private WeightParametersRepository $weightParametersRepository,
+        private WeightParametersMapper $weightParametersMapper,
     ) {
     }
 
@@ -51,12 +53,7 @@ readonly class WeightParametersCollectionProvider implements ProviderInterface
         $output = [];
 
         foreach ($weightParameters as $weightParameter) {
-            $resource = new WeightParametersResource();
-
-            $resource->weight = $weightParameter->getWeight();
-            $resource->datetime = $weightParameter->getDatetime()->format('Y-m-d H:i:s');
-
-            $output[] = $resource;
+            $output[] = $this->weightParametersMapper->mapEntityToResource($weightParameter);
         }
 
         return $output;

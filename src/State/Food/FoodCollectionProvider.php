@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\State\Exercise;
+namespace App\State\Food;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\ApiResource\ExerciseResource;
 use App\ApiResource\Filter\NameFilter;
-use App\Mapper\ExerciseMapper;
-use App\Repository\ExerciseRepository;
+use App\ApiResource\FoodResource;
+use App\Mapper\FoodMapper;
+use App\Repository\FoodRepository;
 use App\Security\SecurityHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * @implements ProviderInterface<ExerciseResource[]>
+ * @implements ProviderInterface<FoodResource[]>
  */
-readonly class ExerciseCollectionProvider implements ProviderInterface
+readonly class FoodCollectionProvider implements ProviderInterface
 {
     use SecurityHelperTrait;
 
     public function __construct(
         private Security $security,
-        private ExerciseRepository $exerciseRepository,
-        private ExerciseMapper $exerciseMapper,
+        private FoodRepository $foodRepository,
+        private FoodMapper $foodMapper,
     ) {
     }
 
@@ -33,7 +33,7 @@ readonly class ExerciseCollectionProvider implements ProviderInterface
     }
 
     /**'
-     * @return ExerciseResource[]
+     * @return FoodResource[]
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
@@ -41,12 +41,12 @@ readonly class ExerciseCollectionProvider implements ProviderInterface
 
         $nameFilter = $context['filters'][NameFilter::NAME] ?? null;
 
-        $exercises = $this->exerciseRepository->findByFilters($user->getId(), $nameFilter);
+        $foods = $this->foodRepository->findByFilters($user->getId(), $nameFilter);
 
         $output = [];
 
-        foreach ($exercises as $exercise) {
-            $output[] = $this->exerciseMapper->mapEntityToResource($exercise);
+        foreach ($foods as $food) {
+            $output[] = $this->foodMapper->mapEntityToResource($food);
         }
 
         return $output;

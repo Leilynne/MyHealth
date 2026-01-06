@@ -31,8 +31,9 @@ class MedicineRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('m');
 
         if ($partialName) {
-            $qb->andWhere('LOWER(m.name) LIKE LOWER(:partialName)')
-                ->setParameter('partialName', '%' . $partialName . '%');
+            $partialName = trim(mb_strtolower($partialName));
+            $qb->andWhere('LOWER(m.name) LIKE :partialName')
+                ->setParameter('partialName', "%$partialName%");
         }
 
         return $qb->orderBy('m.name', 'ASC')->getQuery()->getResult();
