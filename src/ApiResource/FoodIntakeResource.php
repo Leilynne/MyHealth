@@ -11,10 +11,13 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
+use App\ApiResource\Filter\FoodIntakeFilter;
 use App\ApiResource\Filter\PeriodFilter;
 use App\Enum\FoodIntakeTypeEnum;
+use App\Enum\TimeOfDayEnum;
 use App\State\FoodIntake\FoodIntakeAddProcessor;
 use App\State\FoodIntake\FoodIntakeCollectionProvider;
+use App\State\FoodIntake\FoodIntakeDeleteByTypeProcessor;
 use App\State\FoodIntake\FoodIntakeDeleteProcessor;
 use App\State\FoodIntake\FoodIntakeTotalCaloriesProvider;
 use App\State\FoodIntake\FoodIntakeTotalNutrientsProvider;
@@ -33,6 +36,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(
             uriTemplate: '/food-intake/{id}',
             provider: FoodIntakeDeleteProcessor::class,
+        ),
+        new Delete(
+            uriTemplate: '/food-intake',
+            provider: FoodIntakeDeleteByTypeProcessor::class,
+            parameters: [
+                FoodIntakeFilter::NAME => new QueryParameter(filter: FoodIntakeFilter::class, required: true),
+            ],
         ),
         new Post(
             uriTemplate: '/food-intake',

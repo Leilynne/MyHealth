@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\FoodIntake;
+use App\Enum\FoodIntakeTypeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -52,5 +53,19 @@ class FoodIntakeRepository extends ServiceEntityRepository
         }
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function removeByFilters(int $userId, FoodIntakeTypeEnum $foodIntakeType, \DateTimeImmutable $date): void
+    {
+        $this->createQueryBuilder('fi')
+            ->delete()
+            ->where('fi.user = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('fi.type = :type')
+            ->setParameter('type', $foodIntakeType)
+            ->andWhere('fi.date = :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->execute();
     }
 }
