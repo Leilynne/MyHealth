@@ -14,7 +14,6 @@ use ApiPlatform\Metadata\QueryParameter;
 use App\ApiResource\Filter\FoodIntakeFilter;
 use App\ApiResource\Filter\PeriodFilter;
 use App\Enum\FoodIntakeTypeEnum;
-use App\Enum\TimeOfDayEnum;
 use App\State\FoodIntake\FoodIntakeAddProcessor;
 use App\State\FoodIntake\FoodIntakeCollectionProvider;
 use App\State\FoodIntake\FoodIntakeDeleteByTypeProcessor;
@@ -34,15 +33,16 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: FoodIntakeCollectionProvider::class,
         ),
         new Delete(
-            uriTemplate: '/food-intake/{id}',
-            provider: FoodIntakeDeleteProcessor::class,
-        ),
-        new Delete(
             uriTemplate: '/food-intake',
-            provider: FoodIntakeDeleteByTypeProcessor::class,
+            processor: FoodIntakeDeleteByTypeProcessor::class,
             parameters: [
                 FoodIntakeFilter::NAME => new QueryParameter(filter: FoodIntakeFilter::class, required: true),
             ],
+        ),
+        new Delete(
+            uriTemplate: '/food-intake/{id}',
+            requirements: ['id' => '\d+'],
+            processor: FoodIntakeDeleteProcessor::class,
         ),
         new Post(
             uriTemplate: '/food-intake',
