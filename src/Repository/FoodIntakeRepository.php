@@ -64,7 +64,7 @@ class FoodIntakeRepository extends ServiceEntityRepository
             ->andWhere('fi.type = :type')
             ->setParameter('type', $foodIntakeType)
             ->andWhere('fi.date = :date')
-            ->setParameter('date', $date)
+            ->setParameter('date', $date->format('Y-m-d'))
             ->getQuery()
             ->execute();
     }
