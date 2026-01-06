@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Food;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @extends ServiceEntityRepository<Food>
@@ -38,7 +39,7 @@ class FoodRepository extends ServiceEntityRepository
             )->setParameter('userId', $userId)
             ->setParameter('isSystem', true);
 
-        return $queryBuilder->getQuery()->getSingleResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult() ?? throw new NotFoundHttpException();
     }
 
     /**

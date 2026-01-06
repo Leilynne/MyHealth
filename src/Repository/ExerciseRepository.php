@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Exercise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @extends ServiceEntityRepository<Exercise>
@@ -35,7 +36,7 @@ class ExerciseRepository extends ServiceEntityRepository
             )->setParameter('userId', $userId)
             ->setParameter('isSystem', true);
 
-        return $queryBuilder->getQuery()->getSingleResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult() ?? throw new NotFoundHttpException();
     }
 
     /**
