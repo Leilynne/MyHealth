@@ -61,6 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: FoodIntake::class, mappedBy: 'user')]
     private Collection $foodIntakes;
 
+    #[ORM\OneToMany(targetEntity: Food::class, mappedBy: 'user')]
+    private Collection $foodItems;
+
     #[ORM\Column(length: 255, unique: true, nullable: true)]
     private ?string $apiToken = null;
 
